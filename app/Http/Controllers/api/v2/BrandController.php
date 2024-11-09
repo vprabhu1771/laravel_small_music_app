@@ -11,10 +11,19 @@ class BrandController extends Controller
     
     public function index()
     {
+        $brands = Brand::orderby('name','asc')->get();
         
-        $brand = Brand::orderby('name','asc')->get();
+        $transformedBrands =$brands->map(function($brand){
 
-        return response()->json(['data' => $brand],200);
+            return [
+                'id'=>$brand->id,
+                'name'=>$brand->name,
+                'image_path'=>$brand->GetLogoImage(),
+            ];
+        });
+
+
+        return response()->json(['data' => $transformedBrands],200);
     }
     
 }
